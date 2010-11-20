@@ -11,12 +11,12 @@ Widget factory class courtesy off jQuery UI (http://jqueryui.com/)
 
 Description:
 ------------
-After visiting Full Frontal 2010 I had to get my hands on some of that HTML5 canvas goodness. Every project has an animated gif spinner in there somewhere so I decided to start there.
+After visiting Full Frontal 2010 (http://2010.full-frontal.org/) I had to get my hands on some of that HTML5 canvas goodness. Every project has an animated gif spinner in there somewhere so I decided to start there.
 I've implemented this spinner as a jQuery UI widget factory based widget. So the syntax to create an instance of the widget should be familiar to people who have worked with jQuery UI:
 
 $( ".myElement" ).spinnerMehGic();
 
-That will create a spinner with the default settings. You can customize the settings to your liking and create many different types of spinners. Check out my the blog post on my website for some examples of the different styles.
+That will create a spinner with the default settings. You can customize the settings to your liking and create many different types of spinners. Check out the blog post on my website for some examples of the different styles. (http://www.qwerios.nl/2010/11/20/my-canvas-experiment-spinner-meh-gic/)
 
 After creating the widget you can control the widget with:
 $( ".myElement" ).spinnerMehGic( "start" ); 
@@ -25,3 +25,5 @@ $( ".myElement" ).spinnerMehGic( "stop"  );
 
 Changing the widget parameters can be done with the setOptions command which takes the same parameters as the widget constructor:
 $( ".myElement" ).spinnerMehGic( "setOptions", { partSize: 10, gapSize: 20, spread: 360 } );
+
+Check the wiki on github for the full list of options.
