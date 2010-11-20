@@ -14,6 +14,8 @@
                 width:  120px;
             }
         </style>
+        
+        <!--[if IE]><script src="lib/excanvas.js"></script><![endif]-->        
 	</head>
 	<body>
         <h1>Spinner-meh-gic</h1>
@@ -24,13 +26,16 @@
 	   
         <fieldset id="controls">
             <legend>Parameters</legend>
-            <ul>
-                <li><label>Spread (deg): </label><input name="degSpread" type="range" min="0" value="360" max="360" /></li>            
-                <li><label>Part size (deg): </label><input name="degPartSize" type="range" min="0" value="10" max="180" /></li>            
-                <li><label>Gap size (deg): </label><input name="degGapSize" type="range" min="0" value="20" max="180" /></li>
-        
-                <li><label>Type: </label><select name="displayType"><option selected>straight</option><option>pie</option><option>swirl</option></select></li>            
-            </ul>
+            <form>
+                <ul>
+                    <li><label>Spread (deg): </label><input name="degSpread" type="range" min="0" value="360" max="360" /></li>            
+                    <li><label>Part size (deg): </label><input name="degPartSize" type="range" min="0" value="10" max="180" /></li>            
+                    <li><label>Gap size (deg): </label><input name="degGapSize" type="range" min="0" value="20" max="180" /></li>
+            
+                    <li><label>Type: </label><select name="displayType"><option selected>straight</option><option>pie</option><option>swirl</option></select></li>            
+                    <li><button id="stop">Stop</button> <button id="start">Start</button></li>
+                </ul>
+            </form>
         </fieldset>        
            
 	
@@ -53,16 +58,29 @@
                 // The parameter handlers
                 //                
                 $( "input[name='degSpread']" ).change( function() {
-                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { spread: parseInt( this.value, 10 ) } );
+                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { spread: parseInt( $( this ).val(), 10 ) } );
+                    return false;
                 } );
                 $( "input[name='degPartSize']" ).change( function() {
-                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { partSize: parseInt( this.value, 10 ) } );
+                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { partSize: parseInt( $( this ).val(), 10 ) } );
+                    return false;
                 } );
                 $( "input[name='degGapSize']" ).change( function() {
-                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { gapSize: parseInt( this.value, 10 ) } );
+                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { gapSize: parseInt( $( this ).val(), 10 ) } );
+                    return false;
                 } );
                 $( "select[name='displayType']" ).change( function() {
-                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { style: this.value } );
+                    $( ".mySpinner" ).spinnerMehGic( "setOptions", { style: $( this ).val() } );
+                    return false;
+                } );
+                
+                $( "#start" ).click( function() {
+                    $( ".mySpinner" ).spinnerMehGic( "start" );
+                    return false;
+                } );
+                $( "#stop" ).click( function() {
+                    $( ".mySpinner" ).spinnerMehGic( "stop" );
+                    return false;
                 } );
             } );
         </script>

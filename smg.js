@@ -60,11 +60,19 @@
             
             // Create the canvas element
             //
-            var canvas  = $item.append( '<canvas width="' + options.width + '" height="' + options.height + '"></canvas>' );
-            widget._ctx = $item.find( "canvas" )[0].getContext( "2d" );
+            var canvas    = document.createElement( "canvas" );
+            canvas.width  = options.width;
+            canvas.height = options.height;
+            
+            $item.append( canvas );
             
             // Check for excanvas
             //
+            if ( typeof G_vmlCanvasManager != 'undefined' )
+            {
+                canvas = G_vmlCanvasManager.initElement( canvas );
+            }
+            widget._ctx = canvas.getContext( "2d" );
             
             if ( options.autoStart )
             {
@@ -129,6 +137,13 @@
             var $item   = widget.element;
             var options = widget.options;
             
+            if ( widget._timer )
+            {
+                // Already running
+                //
+                return;
+            }
+            
             if ( options.hideOnStop )
             {
                 $item.show();
@@ -159,6 +174,7 @@
             var $item   = widget.element;
 
             clearInterval( widget._timer );
+            widget._timer = null;
             
             if ( widget.options.hideOnStop )
             {
