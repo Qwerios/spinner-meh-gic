@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset=utf-8 />
+    <title>Canvas spinner example</title>
+    
+    <style type="text/css">
+        body {
+            background: #efefef;
+        }
+        
+        canvas {
+            border: 1px solid #000;
+        }
+        
+        #controls label {
+            display: inline-block;
+            width:  120px;
+        }
+    </style>    
+</head>
+<body>
+    <canvas width="48" height="48">
+    </canvas>
+    
+    <fieldset id="controls">
+        <legend>Parameters</legend>
+        <ul>
+            <li><label>Spread (deg): </label><input name="degSpread" type="range" min="0" value="360" max="360" /></li>            
+            <li><label>Step width (deg): </label><input name="degWidth" type="range" min="0" value="10" max="180" /></li>            
+            <li><label>Gap size (deg): </label><input name="degGap" type="range" min="0" value="20" max="180" /></li>
+
+            <li><label>Type: </label><select name="displayType"><option selected>straight</option><option>pie</option><option>swirl</option></select></li>            
+        </ul>
+    </fieldset>        
+    
+    <script type="text/javascript">
+        var canvas = document.querySelector( "canvas" );        
+        var ctx = canvas.getContext( "2d" );
+        
+        var h = canvas.height;
+        var w = canvas.width;
+        
+        function deg2rad( degrees )
+        {
+            return parseFloat( ( Math.PI / 180 ) * degrees );
+        }
+
+        function rad2deg( radials )
+        {
+            return parseFloat( radials / ( Math.PI / 180 ) );
+        }
+        
+        function drawParts( ctx, start, spread, partWidth, gapSize, style, startColor, stopColor )
+        {
+            ctx.lineCap     = "round";
+        
+            var height      = ctx.canvas.height / 2;
+            var width       = ctx.canvas.width  / 2;
+            
+            var stepCount   = Math.ceil( spread / ( partWidth + gapSize ) );
+            var count       = 0;
+            var color       = [];
+            
+            for ( var i = start; i < start + spread; i += partWidth + gapSize )
+            {
+                // Calculate the color cycle
+                // Normally you'd precalculate this but I'm lazy this time
+                //
+                color[ 0 ] = interpolate( stopColor[ 0 ], startColor[ 0 ], count, stepCount ); // Red
+                color[ 1 ] = interpolate( stopColor[ 1 ], startColor[ 1 ], count, stepCount ); // Green
+                color[ 2 ] = interpolate( stopColor[ 2 ], startColor[ 2 ], count, stepCount ); // Blue
+                
+                ctx.beginPath();                
+                ctx.fillStyle = "rgba(" + color.join() + "," + ( ( 1 / stepCount ) * count ) + ")";
+                                
+                ctx.arc( width, height, ( Math.min( width, height ) * 0.9  ), deg2rad( i ), deg2rad( i + partWidth ), false );
+                
+                switch ( style )
+                {
+                    case "swirl":
+                        // Swirl
+                        //                
+                        ctx.arc( width, height, ( Math.min( width, height ) * 0.4  ), deg2rad( i + partWidth + ( partWidth + gapSize ) ), deg2rad( i + ( partWidth + gapSize ) ), true  );                    
+                    break;
+                
+                    case "straight":
+                        // Straight lines
+                        //
+                        ctx.arc( width, height, ( Math.min( width, height ) * 0.4  ), deg2rad( i + partWidth * 2 ), deg2rad( i ), true  );                    
+                    break;
+                
+                    default:
+                        // Pie chart like
+                        //
+                        ctx.arc( width, height, ( Math.min( width, height ) * 0.4  ), deg2rad( i + partWidth ), deg2rad( i ), true  );                    
+                    break;
+                }                
+                
+                ctx.fill();
+                
+                count++;
+            }            
+        }
+        
+        function interpolate( start, end, step, numSteps ) 
+        {
+            if ( start < end ) 
+            {
+                return parseInt( ( ( end - start ) * ( step / numSteps ) ) + start, 10 );
+            } 
+            else 
+            {
+                return parseInt( ( ( start - end ) * ( 1 - ( step / numSteps ) ) ) + end, 10 );
+            }
+        }        
+        
+        var start      = -90;
+        var spread     = parseInt( document.querySelector( "input[name='degSpread']"    ).value, 10 );
+        var width      = parseInt( document.querySelector( "input[name='degWidth']"     ).value, 10 );
+        var stepsize   = parseInt( document.querySelector( "input[name='degGap']"       ).value, 10 );
+        var style      = document.querySelector( "select[name='displayType']"           ).value;
+        
+        var startColor = [ 0, 100, 255 ];
+        var stopColor  = [ 255, 0, 100 ];
+        
+        drawParts( ctx, start, spread, width, stepsize, style, startColor, stopColor );
+        
+        var spinnerAnim = setInterval( function()
+        {
+            ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
+
+            spread    = parseInt( document.querySelector( "input[name='degSpread']"    ).value, 10 );
+            width     = parseInt( document.querySelector( "input[name='degWidth']"     ).value, 10 );
+            stepsize  = parseInt( document.querySelector( "input[name='degGap']"       ).value, 10 );
+            style     = document.querySelector( "select[name='displayType']" ).value;
+            
+            start += stepsize + width;
+            drawParts( ctx, start, spread, width, stepsize, style, startColor, stopColor );
+        }, 100 );
+    </script>
+</body>
+</html>
