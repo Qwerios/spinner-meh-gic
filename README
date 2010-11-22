@@ -7,7 +7,7 @@ http://www.qwerios.nl/
 3rd party libs:
 ---------------
 Internet Explorer support works thanks to the magic of excanvas (http://code.google.com/p/explorercanvas/)
-Widget factory class courtesy off jQuery UI (http://jqueryui.com/)
+Widget factory class courtesy of jQuery UI (http://jqueryui.com/)
 
 Description:
 ------------
